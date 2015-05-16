@@ -71,8 +71,8 @@ public class parseAutomation {
 		round = JOptionPane.showInputDialog("Please Enter Round");
 		deliveryDate = JOptionPane
 				.showInputDialog("Please enter the date to deliver the notifications.\nUse YYYY/MM/DD format.");
-		tournamentName = JOptionPane
-				.showInputDialog("Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");
+		/*tournamentName = JOptionPane
+				.showInputDialog("Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");*/
 		tournamentOffset = (String) JOptionPane
 				.showInputDialog(
 						null,
@@ -90,13 +90,12 @@ public class parseAutomation {
 		while (i <= tableData.length + 1);
 
 	}
-	
-	
-	public void writeLeaderboard() throws FileNotFoundException, UnsupportedEncodingException
-	{
+
+	public void writeLeaderboard() throws FileNotFoundException,
+			UnsupportedEncodingException {
 		PrintWriter writer = new PrintWriter("c:/LPGA/Leaderboard.txt", "UTF-8");
 		for (int z = 0; z < tableData.length; z++) {
-			writer.write("\n  " + i +" " + tableData[z] + " \n ");
+			writer.write("\n  " + i + " " + tableData[z] + " \n ");
 		}
 		writer.close();
 	}
@@ -237,7 +236,7 @@ public class parseAutomation {
 				d = d + 12;
 			}
 		}
-
+		System.out.println("Index " + a + " of " + tableData.length);
 		String player = tableData[d];
 		return player;
 	}
@@ -411,6 +410,7 @@ public class parseAutomation {
 
 		if (position.equalsIgnoreCase("wdc") == true
 				|| position.equalsIgnoreCase("cut") == true
+				|| position.equalsIgnoreCase("wd") == true
 				|| position.equalsIgnoreCase("dq") == true) {
 			finish = true;
 			tearDown();
@@ -442,7 +442,8 @@ public class parseAutomation {
 		}
 	}
 
-	public void removeBlankEntries() throws FileNotFoundException, UnsupportedEncodingException {
+	public void removeBlankEntries() throws FileNotFoundException,
+			UnsupportedEncodingException {
 		errorTest = "removeblank";
 		List<String> list = new ArrayList<String>();
 
@@ -496,9 +497,12 @@ public class parseAutomation {
 
 		try {
 
-			File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(scrFile, new File("c:\\LPGA\\screenshot" + i + ".png"));
-			
+			File scrFile = ((TakesScreenshot) driver)
+					.getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(scrFile, new File("c:\\LPGA\\screenshot" + i
+					+ ".png"));
+
+
 			driver.manage().deleteAllCookies();
 			driver.get("https://www.parse.com/user_session/new");
 
@@ -507,7 +511,7 @@ public class parseAutomation {
 			driver.findElement(By.id("user_session_password")).clear();
 			driver.findElement(By.id("user_session_password")).sendKeys(
 					"ChangX31");
-			driver.findElement(By.cssSelector("button.button")).click();
+			driver.findElement(By.className("submit")).click();
 
 			driver.navigate().to(
 					"https://www.parse.com/apps/lpga-now/push_notifications");
@@ -517,7 +521,7 @@ public class parseAutomation {
 			driver.findElement(By.id("target_type_segment")).click();
 			driver.findElement(By.cssSelector("button.add_constraint_button"))
 					.click();
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			driver.findElement(By.cssSelector("input.default")).click();
 			driver.findElement(By.cssSelector("input.default")).clear();
 			driver.findElement(By.cssSelector("input.default")).sendKeys(
@@ -525,9 +529,9 @@ public class parseAutomation {
 			driver.findElement(By.cssSelector("input.default")).sendKeys(
 					"Player-" + getPlayerID(player) + Keys.ARROW_DOWN
 							+ Keys.ENTER);
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			driver.findElement(By.cssSelector("i.icon_hourGlass")).click();
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			driver.findElement(By.name("push_date")).click();
 			driver.findElement(By.name("push_date")).clear();
 			driver.findElement(By.name("push_date")).sendKeys(deliveryDate);
@@ -545,8 +549,8 @@ public class parseAutomation {
 							player
 									+ " is teeing off for Round "
 									+ Round
-									+ " of the "
-									+ tournamentName
+									//+ " of the "
+									//+ tournamentName
 									+ ". Follow her scores on LPGA.com or the LPGA Now app.");
 			Thread.sleep(2000);
 
@@ -556,7 +560,7 @@ public class parseAutomation {
 				driver.navigate().back();
 
 			} else {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 				driver.findElement(By.id("send_push")).click();
 
 			}
