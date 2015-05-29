@@ -55,6 +55,9 @@ public class parseAutomation {
 	String Hour;
 	String Minute;
 	String aMpM;
+	long starts;
+	String time; 
+	
 
 	@Before
 	public void setUp() throws Exception {
@@ -71,8 +74,12 @@ public class parseAutomation {
 		round = JOptionPane.showInputDialog("Please Enter Round");
 		deliveryDate = JOptionPane
 				.showInputDialog("Please enter the date to deliver the notifications.\nUse YYYY/MM/DD format.");
-		/*tournamentName = JOptionPane
-				.showInputDialog("Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");*/
+
+		if (round.equalsIgnoreCase("1") == true) {
+			tournamentName = JOptionPane
+					.showInputDialog("Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");
+		}
+
 		tournamentOffset = (String) JOptionPane
 				.showInputDialog(
 						null,
@@ -90,6 +97,15 @@ public class parseAutomation {
 		while (i <= tableData.length + 1);
 
 	}
+	
+	public void timeElaspsed() throws InterruptedException
+	{
+		timeWatch watch = timeWatch.start();
+        Thread.sleep(1000 * 10);
+        System.out.println("Time elapsed " + watch.toMinuteSeconds());
+        time = watch.toMinuteSeconds();
+        
+    }
 
 	public void writeLeaderboard() throws FileNotFoundException,
 			UnsupportedEncodingException {
@@ -502,7 +518,6 @@ public class parseAutomation {
 			FileUtils.copyFile(scrFile, new File("c:\\LPGA\\screenshot" + i
 					+ ".png"));
 
-
 			driver.manage().deleteAllCookies();
 			driver.get("https://www.parse.com/user_session/new");
 
@@ -544,14 +559,24 @@ public class parseAutomation {
 					.selectByVisibleText(aMpM);
 			Thread.sleep(1500);
 			driver.findElement(By.id("message_all")).clear();
-			driver.findElement(By.id("message_all"))
-					.sendKeys(
-							player
-									+ " is teeing off for Round "
-									+ Round
-									//+ " of the "
-									//+ tournamentName
-									+ ". Follow her scores on LPGA.com or the LPGA Now app.");
+
+			if (round.equalsIgnoreCase("1")) {
+				driver.findElement(By.id("message_all"))
+						.sendKeys(
+								player
+										+ " is teeing off for Round "
+										+ Round
+										+ " of the "
+										+ tournamentName
+										+ ". Follow her scores on LPGA.com or the LPGA Now app.");
+			} else {
+				driver.findElement(By.id("message_all"))
+						.sendKeys(
+								player
+										+ " is teeing off for Round "
+										+ Round
+										+ ". Follow her scores on LPGA.com or the LPGA Now app.");
+			}
 			Thread.sleep(2000);
 
 			if (driver.findElement(By.id("recipients_counter")).equals(
@@ -586,13 +611,13 @@ public class parseAutomation {
 		}
 		if (i >= tableData.length || finish == true) {
 			JOptionPane.showMessageDialog(null,
-					"Success! Please review Parse entries.");
+					"Success! Please review Parse entries." + "\nTime to complete: " + time);
 		} else {
 			JOptionPane
 					.showMessageDialog(
 							null,
 							"Error occured.  Please vist C:\\LPGA Errors.txt  "
-									+ "\nIf this file does not exist, please create it and next time you will have an error log.");
+									+ "\nIf this file does not exist, please create it and next time you will have an error log." + "\nTime to complete: " + time);
 		}
 
 	}
