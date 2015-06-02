@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
 
@@ -98,14 +99,7 @@ public class parseAutomation {
 
 	}
 	
-	public void timeElaspsed() throws InterruptedException
-	{
-		timeWatch watch = timeWatch.start();
-        Thread.sleep(1000 * 10);
-        System.out.println("Time elapsed " + watch.toMinuteSeconds());
-        time = watch.toMinuteSeconds();
-        
-    }
+	
 
 	public void writeLeaderboard() throws FileNotFoundException,
 			UnsupportedEncodingException {
@@ -146,7 +140,7 @@ public class parseAutomation {
 		return EST;
 	}
 
-	public String getPlayerURL(String JSON) {
+	public String getPlayerURL(String JSON) throws JSONException {
 		JSONObject obj = new JSONObject(JSON);
 		JSONArray playerArray = obj.getJSONArray("data");
 		String playerID = "";
@@ -158,7 +152,7 @@ public class parseAutomation {
 		return playerID;
 	}
 
-	public String getPlayerID(String playerName) {
+	public String getPlayerID(String playerName) throws JSONException {
 		String text;
 		String text1;
 		String text2;
