@@ -65,7 +65,7 @@ public class parseAutomation {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "http:/www.lpga.com";
+		baseUrl = "file:///C:/Users/kevin.anderson/Desktop/Leaderboard%20_%20LPGA%20_%20Ladies%20Professional%20Golf%20Association.html";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -432,7 +432,7 @@ public class parseAutomation {
 			errorTest = "leaderboard";
 
 		{
-			driver.get(baseUrl + "/leaderboard");
+			//driver.get(baseUrl + "/leaderboard");
 			Thread.sleep(1000);
 			WebElement table = driver.findElement(By
 					.className("live-leaderboard"));
@@ -598,6 +598,7 @@ public class parseAutomation {
 	@After
 	public void tearDown() throws Exception {
 		driver.quit();
+		driver2.quit();
 		writeErrors();
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
