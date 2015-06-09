@@ -65,7 +65,7 @@ public class parseAutomation {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "file:///C:/Users/kevin.anderson/Desktop/Leaderboard%20_%20LPGA%20_%20Ladies%20Professional%20Golf%20Association.html";
+		baseUrl = "file:///C:/Users/kevin.anderson/Dropbox/Leaderboard%20_%20LPGA.html";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -246,9 +246,23 @@ public class parseAutomation {
 				d = d + 12;
 			}
 		}
-		System.out.println("Index " + a + " of " + tableData.length);
+		
+		
+		System.out.println(percentComplete());
 		String player = tableData[d];
 		return player;
+	}
+	
+	public String percentComplete()
+	{
+		int divisor = tableData.length;
+		int numerator = a;
+		
+		int percent = numerator / divisor;
+		
+		String status = percent + " Complete";
+		
+		return status;
 	}
 
 	public String Hour() {
@@ -459,7 +473,7 @@ public class parseAutomation {
 
 		for (String s : tableData) {
 			if (s != null && s.length() > 0) {
-				if (s.contains("<BODY") == true) {
+				if (s.contains("<BODY") == true  || s.contains("Cut Line")) {
 				} else {
 					list.add(s);
 				}
