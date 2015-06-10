@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class parseAutomation {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "file:///C:/Users/kevin.anderson/Dropbox/Leaderboard%20_%20LPGA.html";
+		baseUrl = "file:///C:/Users/kevin.anderson/Desktop/Leaderboard%20_%20LPGA%20_%20Ladies%20Professional%20Golf%20Association.html";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -255,12 +256,18 @@ public class parseAutomation {
 	
 	public String percentComplete()
 	{
-		int divisor = tableData.length;
-		int numerator = a;
+		float divisor = tableData.length;
+		float numerator = a;
 		
-		int percent = numerator / divisor;
+		float percent = numerator / divisor;
 		
-		String status = percent + " Complete";
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		percent = percent * 100;
+		
+		String percentString = df.format(percent);
+		
+		String status = percentString + "% Complete";
 		
 		return status;
 	}
