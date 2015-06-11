@@ -1,6 +1,8 @@
 package Parse.Automation;
 
 import java.awt.AWTException;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -14,14 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.border.Border;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
+import org.junit.runner.JUnitCore;
 
 import static org.junit.Assert.*;
 
@@ -58,20 +64,32 @@ public class parseAutomation {
 	String Minute;
 	String aMpM;
 	long starts;
-	String time; 
+	String time;
+	String percentString;
+	JProgressBar progressBar = new JProgressBar();
+	JFrame pf = new JFrame("Progress");
 	
+
+	public static void main(String[] args) {
+		JUnitCore.main("Parse.Automation.parseAutomation");
+	}
 
 	@Before
 	public void setUp() throws Exception {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "file:///C:/Users/kevin.anderson/Desktop/Leaderboard%20_%20LPGA%20_%20Ladies%20Professional%20Golf%20Association.html";
+		baseUrl = "//Leaderboard _ LPGA.html";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		
 	}
 
 	@Test
 	public void test() throws Exception {
+		
+	
+		
+		System.out.println("Get Ready to be Parsified!!!");
 		errorTest = "Test";
 		round = JOptionPane.showInputDialog("Please Enter Round");
 		deliveryDate = JOptionPane
@@ -88,6 +106,8 @@ public class parseAutomation {
 						"Please selct the time zone the tournament is being played in.",
 						"Timezone", JOptionPane.PLAIN_MESSAGE, null, timeZones,
 						"");
+		progress(0);
+		
 		leaderBoard();
 		removeBlankEntries();
 
@@ -99,8 +119,6 @@ public class parseAutomation {
 		while (i <= tableData.length + 1);
 
 	}
-	
-	
 
 	public void writeLeaderboard() throws FileNotFoundException,
 			UnsupportedEncodingException {
@@ -247,29 +265,47 @@ public class parseAutomation {
 				d = d + 12;
 			}
 		}
-		
-		
+
 		System.out.println(percentComplete());
 		String player = tableData[d];
 		return player;
 	}
-	
-	public String percentComplete()
-	{
+
+	public String percentComplete() {
 		float divisor = tableData.length;
-		float numerator = a;
-		
+		float numerator = d;
+
 		float percent = numerator / divisor;
-		
+
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
 		percent = percent * 100;
 		
-		String percentString = df.format(percent);
-		
+		percentString = df.format(percent);
+
 		String status = percentString + "% Complete";
 		
+		DecimalFormat fd = new DecimalFormat();
+		fd.setMaximumFractionDigits(0);
+		String p = fd.format(percent);
+		progress(Integer.parseInt(p));
+		
 		return status;
+	}
+	
+	public void progress(int percentBar) {
+		
+		//JProgressBar progressBar = new JProgressBar();
+		pf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container content = pf.getContentPane();
+		
+		progressBar.setValue(percentBar);
+		progressBar.setStringPainted(true);
+		Border border = BorderFactory.createTitledBorder("Status Bar will begin once leaderboard has been read.");
+		progressBar.setBorder(border);
+		content.add(progressBar, BorderLayout.NORTH);
+		pf.setSize(300, 100);
+		pf.setVisible(true);
 	}
 
 	public String Hour() {
@@ -453,7 +489,7 @@ public class parseAutomation {
 			errorTest = "leaderboard";
 
 		{
-			//driver.get(baseUrl + "/leaderboard");
+			// driver.get(baseUrl + "/leaderboard");
 			Thread.sleep(1000);
 			WebElement table = driver.findElement(By
 					.className("live-leaderboard"));
@@ -480,7 +516,7 @@ public class parseAutomation {
 
 		for (String s : tableData) {
 			if (s != null && s.length() > 0) {
-				if (s.contains("<BODY") == true  || s.contains("Cut Line")) {
+				if (s.contains("<BODY") == true || s.contains("Cut Line")) {
 				} else {
 					list.add(s);
 				}
@@ -627,13 +663,15 @@ public class parseAutomation {
 		}
 		if (i >= tableData.length || finish == true) {
 			JOptionPane.showMessageDialog(null,
-					"Success! Please review Parse entries." + "\nTime to complete: " + time);
+					"Success! Please review Parse entries."
+							+ "\nTime to complete: " + time);
 		} else {
 			JOptionPane
 					.showMessageDialog(
 							null,
 							"Error occured.  Please vist C:\\LPGA Errors.txt  "
-									+ "\nIf this file does not exist, please create it and next time you will have an error log." + "\nTime to complete: " + time);
+									+ "\nIf this file does not exist, please create it and next time you will have an error log."
+									+ "\nTime to complete: " + time);
 		}
 
 	}
