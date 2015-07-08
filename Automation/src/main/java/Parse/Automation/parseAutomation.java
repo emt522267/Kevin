@@ -68,7 +68,6 @@ public class parseAutomation {
 	String percentString;
 	JProgressBar progressBar = new JProgressBar();
 	JFrame pf = new JFrame("Progress");
-	
 
 	public static void main(String[] args) {
 		JUnitCore.main("Parse.Automation.parseAutomation");
@@ -79,16 +78,14 @@ public class parseAutomation {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "//Leaderboard _ LPGA.html";
+		baseUrl = "file:///C:/Users/kevin.anderson/Desktop/Leaderboard%20_%20LPGA%20_%20Ladies%20Professional%20Golf%20Association.html";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		
+
 	}
 
 	@Test
 	public void test() throws Exception {
-		
-	
-		
+
 		System.out.println("Get Ready to be Parsified!!!");
 		errorTest = "Test";
 		round = JOptionPane.showInputDialog("Please Enter Round");
@@ -107,7 +104,7 @@ public class parseAutomation {
 						"Timezone", JOptionPane.PLAIN_MESSAGE, null, timeZones,
 						"");
 		progress(0);
-		
+
 		leaderBoard();
 		removeBlankEntries();
 
@@ -116,7 +113,7 @@ public class parseAutomation {
 			Parse(getPlayer(), round, Hour(), Minute(), AMPM());
 		}
 
-		while (i <= tableData.length + 1);
+		while (i <= tableData.length);
 
 	}
 
@@ -145,12 +142,12 @@ public class parseAutomation {
 		// try {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
-		formatter.setTimeZone(TimeZone.getTimeZone("US/Eastern"));
+		formatter.setTimeZone(TimeZone.getTimeZone(tournamentOffset));
 		java.util.Date date = new Date(1);
 		String dateString = dateTime;
 
 		date = formatter.parse(dateString);
-		formatter.setTimeZone(TimeZone.getTimeZone(tournamentOffset));
+		formatter.setTimeZone(TimeZone.getTimeZone("US/Eastern"));
 		EST = formatter.format(date);
 
 		/*
@@ -280,28 +277,29 @@ public class parseAutomation {
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
 		percent = percent * 100;
-		
+
 		percentString = df.format(percent);
 
 		String status = percentString + "% Complete";
-		
+
 		DecimalFormat fd = new DecimalFormat();
 		fd.setMaximumFractionDigits(0);
 		String p = fd.format(percent);
 		progress(Integer.parseInt(p));
-		
+
 		return status;
 	}
-	
+
 	public void progress(int percentBar) {
-		
-		//JProgressBar progressBar = new JProgressBar();
+
+		// JProgressBar progressBar = new JProgressBar();
 		pf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container content = pf.getContentPane();
-		
+
 		progressBar.setValue(percentBar);
 		progressBar.setStringPainted(true);
-		Border border = BorderFactory.createTitledBorder("Status Bar will begin once leaderboard has been read.");
+		Border border = BorderFactory
+				.createTitledBorder("Status Bar will begin once the leaderboard \nhas been read.");
 		progressBar.setBorder(border);
 		content.add(progressBar, BorderLayout.NORTH);
 		pf.setSize(300, 100);
