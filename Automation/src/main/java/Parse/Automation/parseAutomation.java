@@ -113,7 +113,7 @@ public class parseAutomation {
 			Parse(getPlayer(), round, Hour(), Minute(), AMPM());
 		}
 
-		while (i <= tableData.length);
+		while (i <= tableData.length + 1);
 
 	}
 
@@ -139,7 +139,7 @@ public class parseAutomation {
 
 	public String setEST(String dateTime) throws ParseException {
 		String EST = "";
-		// try {
+		// try {delete
 
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
 		formatter.setTimeZone(TimeZone.getTimeZone(tournamentOffset));
