@@ -580,7 +580,7 @@ public class parseAutomation {
 			driver.navigate().to(
 					"https://www.parse.com/apps/lpga-now/push_notifications");
 			Thread.sleep(2000);
-			driver.findElement(By.cssSelector("a.buttonSend.ui_button > span"))
+			driver.findElement(By.linkText("Send a push"))
 					.click();
 			driver.findElement(By.id("target_type_segment")).click();
 			driver.findElement(By.cssSelector("button.add_constraint_button"))
