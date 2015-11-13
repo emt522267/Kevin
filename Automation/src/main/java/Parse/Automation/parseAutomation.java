@@ -68,6 +68,7 @@ public class parseAutomation {
 	String percentString;
 	JProgressBar progressBar = new JProgressBar();
 	JFrame pf = new JFrame("Progress");
+	String errorex = "";
 
 	public static void main(String[] args) {
 		JUnitCore.main("Parse.Automation.parseAutomation");
@@ -93,16 +94,13 @@ public class parseAutomation {
 				.showInputDialog("Please enter the date to deliver the notifications.\nUse YYYY/MM/DD format.");
 
 		if (round.equalsIgnoreCase("1") == true) {
-			tournamentName = JOptionPane
-					.showInputDialog("Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");
+			tournamentName = JOptionPane.showInputDialog(
+					"Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");
 		}
 
-		tournamentOffset = (String) JOptionPane
-				.showInputDialog(
-						null,
-						"Please selct the time zone the tournament is being played in.",
-						"Timezone", JOptionPane.PLAIN_MESSAGE, null, timeZones,
-						"");
+		tournamentOffset = (String) JOptionPane.showInputDialog(null,
+				"Please selct the time zone the tournament is being played in.", "Timezone", JOptionPane.PLAIN_MESSAGE,
+				null, timeZones, "");
 		progress(0);
 
 		leaderBoard();
@@ -117,8 +115,7 @@ public class parseAutomation {
 
 	}
 
-	public void writeLeaderboard() throws FileNotFoundException,
-			UnsupportedEncodingException {
+	public void writeLeaderboard() throws FileNotFoundException, UnsupportedEncodingException {
 		PrintWriter writer = new PrintWriter("c:/LPGA/Leaderboard.txt", "UTF-8");
 		for (int z = 0; z < tableData.length; z++) {
 			writer.write("\n  " + i + " " + tableData[z] + " \n ");
@@ -126,8 +123,7 @@ public class parseAutomation {
 		writer.close();
 	}
 
-	public void writeErrors() throws FileNotFoundException,
-			UnsupportedEncodingException {
+	public void writeErrors() throws FileNotFoundException, UnsupportedEncodingException {
 
 		PrintWriter writer = new PrintWriter("c:/LPGA/LPGA Errors.txt", "UTF-8");
 		for (int u = 0; u < errors.length; u++) {
@@ -173,8 +169,7 @@ public class parseAutomation {
 		String text1;
 		String text2;
 		errorTest = "getplayerid";
-		driver2.get("http://origin-www.lpga.com/-/ajax/PlayerSearch/Search?text="
-				+ playerName);
+		driver2.get("http://origin-www.lpga.com/-/ajax/PlayerSearch/Search?text=" + playerName);
 		text = driver2.findElement(By.tagName("body")).getText();
 		text1 = getPlayerURL(text);
 
@@ -298,8 +293,7 @@ public class parseAutomation {
 
 		progressBar.setValue(percentBar);
 		progressBar.setStringPainted(true);
-		Border border = BorderFactory
-				.createTitledBorder("Status Bar will begin once the leaderboard \nhas been read.");
+		Border border = BorderFactory.createTitledBorder("Status Bar will begin once the leaderboard \nhas been read.");
 		progressBar.setBorder(border);
 		content.add(progressBar, BorderLayout.NORTH);
 		pf.setSize(300, 100);
@@ -346,10 +340,8 @@ public class parseAutomation {
 			hour = hour.replace("*", "");
 		}
 
-		if (hour.startsWith("1:") || hour.startsWith("2:")
-				|| hour.startsWith("3:") || hour.startsWith("4:")
-				|| hour.startsWith("5:") || hour.startsWith("6:")
-				|| hour.startsWith("7:") || hour.startsWith("8:")
+		if (hour.startsWith("1:") || hour.startsWith("2:") || hour.startsWith("3:") || hour.startsWith("4:")
+				|| hour.startsWith("5:") || hour.startsWith("6:") || hour.startsWith("7:") || hour.startsWith("8:")
 				|| hour.startsWith("9:")) {
 			hour = "0" + hour;
 		}
@@ -400,11 +392,9 @@ public class parseAutomation {
 
 		minute = tableData[b];
 
-		if (minute.startsWith("1:") || minute.startsWith("2:")
-				|| minute.startsWith("3:") || minute.startsWith("4:")
-				|| minute.startsWith("5:") || minute.startsWith("6:")
-				|| minute.startsWith("7:") || minute.startsWith("8:")
-				|| minute.startsWith("9:")) {
+		if (minute.startsWith("1:") || minute.startsWith("2:") || minute.startsWith("3:") || minute.startsWith("4:")
+				|| minute.startsWith("5:") || minute.startsWith("6:") || minute.startsWith("7:")
+				|| minute.startsWith("8:") || minute.startsWith("9:")) {
 			minute = "0" + minute;
 		}
 
@@ -452,14 +442,9 @@ public class parseAutomation {
 
 		System.out.println(tableData[c]);
 
-		if (ampm.startsWith("1:") == true || ampm.startsWith("2:") == true
-				|| ampm.startsWith("3:") == true
-				|| ampm.startsWith("4:") == true
-				|| ampm.startsWith("5:") == true
-				|| ampm.startsWith("6:") == true
-				|| ampm.startsWith("7:") == true
-				|| ampm.startsWith("8:") == true
-				|| ampm.startsWith("9:") == true) {
+		if (ampm.startsWith("1:") == true || ampm.startsWith("2:") == true || ampm.startsWith("3:") == true
+				|| ampm.startsWith("4:") == true || ampm.startsWith("5:") == true || ampm.startsWith("6:") == true
+				|| ampm.startsWith("7:") == true || ampm.startsWith("8:") == true || ampm.startsWith("9:") == true) {
 			ampm = "0" + ampm;
 
 		}
@@ -473,10 +458,8 @@ public class parseAutomation {
 
 		String position = Position();
 
-		if (position.equalsIgnoreCase("wdc") == true
-				|| position.equalsIgnoreCase("cut") == true
-				|| position.equalsIgnoreCase("wd") == true
-				|| position.equalsIgnoreCase("dq") == true) {
+		if (position.equalsIgnoreCase("wdc") == true || position.equalsIgnoreCase("cut") == true
+				|| position.equalsIgnoreCase("wd") == true || position.equalsIgnoreCase("dq") == true) {
 			finish = true;
 			tearDown();
 		}
@@ -489,8 +472,7 @@ public class parseAutomation {
 		{
 			// driver.get(baseUrl + "/leaderboard");
 			Thread.sleep(1000);
-			WebElement table = driver.findElement(By
-					.className("live-leaderboard"));
+			WebElement table = driver.findElement(By.className("live-leaderboard"));
 			Thread.sleep(500);
 			List<WebElement> allRows = table.findElements(By.tagName("TR"));
 
@@ -507,8 +489,7 @@ public class parseAutomation {
 		}
 	}
 
-	public void removeBlankEntries() throws FileNotFoundException,
-			UnsupportedEncodingException {
+	public void removeBlankEntries() throws FileNotFoundException, UnsupportedEncodingException {
 		errorTest = "removeblank";
 		List<String> list = new ArrayList<String>();
 
@@ -548,9 +529,8 @@ public class parseAutomation {
 		System.out.println(aMpM);
 	}
 
-	public void Parse(String player, String Round, String hour, String min,
-			String AM) throws AWTException, InterruptedException,
-			ParseException {
+	public void Parse(String player, String Round, String hour, String min, String AM)
+			throws AWTException, InterruptedException, ParseException {
 		errorTest = "parse";
 
 		String conDate = deliveryDate + " " + hour + ":" + min + " " + AM;
@@ -562,37 +542,30 @@ public class parseAutomation {
 
 		try {
 
-			File scrFile = ((TakesScreenshot) driver)
-					.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(scrFile, new File("c:\\LPGA\\screenshot" + i
-					+ ".png"));
+			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			FileUtils.copyFile(scrFile, new File("c:\\LPGA\\screenshot" + i + ".png"));
 
 			driver.manage().deleteAllCookies();
 			driver.get("https://www.parse.com/user_session/new");
 
-			driver.findElement(By.id("user_session_email")).sendKeys(
-					"jake.brokaw@lpga.com");
+			driver.findElement(By.id("user_session_email")).sendKeys("jake.brokaw@lpga.com");
 			driver.findElement(By.id("user_session_password")).clear();
-			driver.findElement(By.id("user_session_password")).sendKeys(
-					"ChangX31");
+			driver.findElement(By.id("user_session_password")).sendKeys("ChangX31");
 			driver.findElement(By.className("submit")).click();
 
-			driver.navigate().to(
-					"https://www.parse.com/apps/lpga-now/push_notifications");
+			driver.navigate().to("https://www.parse.com/apps/lpga-now/push_notifications");
 			Thread.sleep(2000);
-			driver.findElement(By.linkText("Send a push"))
-					.click();
-			driver.findElement(By.id("target_type_segment")).click();
-			driver.findElement(By.cssSelector("button.add_constraint_button"))
-					.click();
+			driver.findElement(By.linkText("Send a push")).click();
+			driver.findElement(By.className("icon_windows")).click();
+
+			// driver.findElement(By.id("target_type_segment")).click();
+			driver.findElement(By.cssSelector("button.add_constraint_button")).click();
 			Thread.sleep(2000);
 			driver.findElement(By.cssSelector("input.default")).click();
 			driver.findElement(By.cssSelector("input.default")).clear();
-			driver.findElement(By.cssSelector("input.default")).sendKeys(
-					Keys.DELETE);
-			driver.findElement(By.cssSelector("input.default")).sendKeys(
-					"Player-" + getPlayerID(player) + Keys.ARROW_DOWN
-							+ Keys.ENTER);
+			driver.findElement(By.cssSelector("input.default")).sendKeys(Keys.DELETE);
+			driver.findElement(By.cssSelector("input.default"))
+					.sendKeys("Player-" + getPlayerID(player) + Keys.ARROW_DOWN + Keys.ENTER);
 			Thread.sleep(2000);
 			driver.findElement(By.cssSelector("i.icon_hourGlass")).click();
 			Thread.sleep(2000);
@@ -600,36 +573,22 @@ public class parseAutomation {
 			driver.findElement(By.name("push_date")).clear();
 			driver.findElement(By.name("push_date")).sendKeys(deliveryDate);
 			Thread.sleep(3000);
-			new Select(driver.findElement(By.name("push_hour")))
-					.selectByVisibleText(Hour);
-			new Select(driver.findElement(By.name("push_minute")))
-					.selectByVisibleText(":" + Minute);
-			new Select(driver.findElement(By.name("push_ampm")))
-					.selectByVisibleText(aMpM);
+			new Select(driver.findElement(By.name("push_hour"))).selectByVisibleText(Hour);
+			new Select(driver.findElement(By.name("push_minute"))).selectByVisibleText(":" + Minute);
+			new Select(driver.findElement(By.name("push_ampm"))).selectByVisibleText(aMpM);
 			Thread.sleep(1500);
 			driver.findElement(By.id("message_all")).clear();
 
 			if (round.equalsIgnoreCase("1")) {
-				driver.findElement(By.id("message_all"))
-						.sendKeys(
-								player
-										+ " is teeing off for Round "
-										+ Round
-										+ " of the "
-										+ tournamentName
-										+ ". Follow her scores on LPGA.com or the LPGA Now app.");
+				driver.findElement(By.id("message_all")).sendKeys(player + " is teeing off for Round " + Round
+						+ " of the " + tournamentName + ". Follow her scores on LPGA.com or the LPGA Now app.");
 			} else {
-				driver.findElement(By.id("message_all"))
-						.sendKeys(
-								player
-										+ " is teeing off for Round "
-										+ Round
-										+ ". Follow her scores on LPGA.com or the LPGA Now app.");
+				driver.findElement(By.id("message_all")).sendKeys(player + " is teeing off for Round " + Round
+						+ ". Follow her scores on LPGA.com or the LPGA Now app.");
 			}
 			Thread.sleep(2000);
 
-			if (driver.findElement(By.id("recipients_counter")).equals(
-					"This will be sent to 0 devices") == true) {
+			if (driver.findElement(By.id("recipients_counter")).equals("This will be sent to 0 devices") == true) {
 				errors[i] = "\n" + player + "\n     ";
 				driver.navigate().back();
 
@@ -643,7 +602,13 @@ public class parseAutomation {
 
 			errors[i] = "\n" + player + "\n     " + w.toString();
 
-		} catch (Exception ex) {
+		}
+
+		catch (ArrayIndexOutOfBoundsException oob) {
+			errorex = "Success! Please review Parse entries.";
+		}
+
+		catch (Exception ex) {
 			errors[i] = "\n" + player + "\n     " + ex.toString();
 		}
 
@@ -660,16 +625,17 @@ public class parseAutomation {
 			fail(verificationErrorString);
 		}
 		if (i >= tableData.length || finish == true) {
-			JOptionPane.showMessageDialog(null,
-					"Success! Please review Parse entries."
-							+ "\nTime to complete: " + time);
+			JOptionPane.showMessageDialog(null, "Success! Please review Parse entries.");
 		} else {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							"Error occured.  Please vist C:\\LPGA Errors.txt  "
-									+ "\nIf this file does not exist, please create it and next time you will have an error log."
-									+ "\nTime to complete: " + time);
+
+			if (errorex == "") {
+				JOptionPane.showMessageDialog(null,
+						"Error occured.  Please vist C:\\LPGA Errors.txt  "
+								+ "\nIf this file does not exist, please create it and next time you will have an error log."
+								+ "\nTime to complete: " + time);
+			} else {
+				JOptionPane.showMessageDialog(null, "Success! Please review Parse entries.");
+			}
 		}
 
 	}
