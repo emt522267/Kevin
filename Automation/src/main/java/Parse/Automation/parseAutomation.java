@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -21,16 +22,13 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.border.Border;
-
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
 import org.junit.runner.JUnitCore;
-
 import static org.junit.Assert.*;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -49,8 +47,6 @@ public class parseAutomation {
 	int i;
 	String deliveryDate;
 	int a = 7;
-	int b = 7;
-	int c = 7;
 	int d = 5;
 	int f = 1;
 	String tournamentName;
@@ -62,6 +58,7 @@ public class parseAutomation {
 	String tearApart;
 	String Hour;
 	String Minute;
+	String minute;
 	String aMpM;
 	long starts;
 	String time;
@@ -69,6 +66,10 @@ public class parseAutomation {
 	JProgressBar progressBar = new JProgressBar();
 	JFrame pf = new JFrame("Progress");
 	String errorex = "";
+	String leaderboardFile = "c:/LPGA/Leaderboard.txt";
+	String errorFile = "c:/LPGA/LPGA Errors.txt";
+	String staticHTML = "C:/LPGA/staticHTML.html";
+	String staticHTMLURL = "file:///C:/LPGA/staticHTML.html";
 
 	public static void main(String[] args) {
 		JUnitCore.main("Parse.Automation.parseAutomation");
@@ -79,7 +80,8 @@ public class parseAutomation {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "file:///C:/Users/kevin.anderson/Desktop/Leaderboard%20_%20LPGA%20_%20Ladies%20Professional%20Golf%20Association.html";
+		baseUrl = "C:\\Users\\kevin.anderson\\Desktop\\Leaderboard _ LPGA _ Ladies Professional Golf Association.html";
+		// "http://lpga.com/leaderboard";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 	}
@@ -116,26 +118,36 @@ public class parseAutomation {
 	}
 
 	public void writeLeaderboard() throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter("c:/LPGA/Leaderboard.txt", "UTF-8");
-		for (int z = 0; z < tableData.length; z++) {
-			writer.write("\n  " + i + " " + tableData[z] + " \n ");
+
+		try {
+
+			PrintWriter writer = new PrintWriter(leaderboardFile, "UTF-8");
+			for (int z = 0; z < tableData.length; z++) {
+				writer.write("\n  " + i + " " + tableData[z] + " \n ");
+			}
+			writer.close();
+		} catch (FileNotFoundException fnf) {
+			@SuppressWarnings("unused")
+			File file = new File(leaderboardFile);
 		}
-		writer.close();
 	}
 
 	public void writeErrors() throws FileNotFoundException, UnsupportedEncodingException {
 
-		PrintWriter writer = new PrintWriter("c:/LPGA/LPGA Errors.txt", "UTF-8");
-		for (int u = 0; u < errors.length; u++) {
-			writer.write(errors[u] + " \n " + errorTest);
+		try {
+			PrintWriter writer = new PrintWriter(errorFile, "UTF-8");
+			for (int u = 0; u < errors.length; u++) {
+				writer.write(errors[u] + " \n " + errorTest);
+			}
+			writer.close();
+		} catch (FileNotFoundException fnf) {
+			@SuppressWarnings("unused")
+			File file = new File(errorFile);
 		}
-		writer.close();
-
 	}
 
 	public String setEST(String dateTime) throws ParseException {
 		String EST = "";
-		// try {delete
 
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm aa");
 		formatter.setTimeZone(TimeZone.getTimeZone(tournamentOffset));
@@ -146,9 +158,6 @@ public class parseAutomation {
 		formatter.setTimeZone(TimeZone.getTimeZone("US/Eastern"));
 		EST = formatter.format(date);
 
-		/*
-		 * } catch (Exception e) { errors[i] = e.toString(); }
-		 */
 		return EST;
 	}
 
@@ -179,7 +188,7 @@ public class parseAutomation {
 
 		text2 = text1.substring(beginSubString, endSubString);
 
-		System.out.println(text2);
+		System.out.println("   Player ID: " + text2);
 
 		return text2;
 	}
@@ -220,7 +229,7 @@ public class parseAutomation {
 		}
 
 		String position = tableData[f];
-		System.out.println(position);
+		System.out.println("Position: " + position);
 		return position;
 	}
 
@@ -229,9 +238,9 @@ public class parseAutomation {
 		if (round.equals("1") == true) {
 
 			if (i == 3) {
-				d = 3;
+				d = 2;
 			} else {
-				d = d + 5;
+				d = d + 4;
 			}
 		}
 		if (round.equalsIgnoreCase("2") == true) {
@@ -258,7 +267,7 @@ public class parseAutomation {
 			}
 		}
 
-		System.out.println(percentComplete());
+		System.out.println("Percent Complete: " + percentComplete());
 		String player = tableData[d];
 		return player;
 	}
@@ -287,10 +296,8 @@ public class parseAutomation {
 
 	public void progress(int percentBar) {
 
-		// JProgressBar progressBar = new JProgressBar();
 		pf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container content = pf.getContentPane();
-
 		progressBar.setValue(percentBar);
 		progressBar.setStringPainted(true);
 		Border border = BorderFactory.createTitledBorder("Status Bar will begin once the leaderboard \nhas been read.");
@@ -300,16 +307,14 @@ public class parseAutomation {
 		pf.setVisible(true);
 	}
 
-	public String Hour() {
-		String hour;
-		errorTest = "hour";
+	public String time() {
 
 		if (round.equals("1") == true) {
 
 			if (i == 3) {
-				a = 4;
+				a = 3;
 			} else {
-				a = a + 5;
+				a = a + 4;
 			}
 		}
 		if (round.equalsIgnoreCase("2") == true) {
@@ -334,121 +339,58 @@ public class parseAutomation {
 			}
 		}
 
-		hour = tableData[a];
+		minute = tableData[a];
 
-		if (hour.endsWith("*")) {
-			hour = hour.replace("*", "");
-		}
+		System.out.println("Time: " + minute);
 
-		if (hour.startsWith("1:") || hour.startsWith("2:") || hour.startsWith("3:") || hour.startsWith("4:")
-				|| hour.startsWith("5:") || hour.startsWith("6:") || hour.startsWith("7:") || hour.startsWith("8:")
-				|| hour.startsWith("9:")) {
-			hour = "0" + hour;
-		}
-
-		String hour1 = hour.substring(0, 2);
-
-		hour1 = hour1.replaceFirst("^0+(?!$)", "");
-
-		if (hour1.startsWith("0")) {
-			hour1 = hour1.replaceFirst("^0+(?!$)", "");
-		}
-
-		return hour1;
-	}
-
-	public String Minute() {
-		String minute;
-		errorTest = "minute";
-		if (round.equals("1") == true) {
-
-			if (i == 3) {
-				b = 4;
-			} else {
-				b = b + 5;
-			}
-		}
-		if (round.equalsIgnoreCase("2") == true) {
-			if (i == 3) {
-				b = 7;
-			} else {
-				b = b + 10;
-			}
-		}
-		if (round.equalsIgnoreCase("3") == true) {
-			if (i == 3) {
-				b = 7;
-			} else {
-				b = b + 11;
-			}
-		}
-		if (round.equalsIgnoreCase("4") == true) {
-			if (i == 3) {
-				b = 7;
-			} else {
-				b = b + 12;
-			}
-		}
-
-		minute = tableData[b];
-
-		if (minute.startsWith("1:") || minute.startsWith("2:") || minute.startsWith("3:") || minute.startsWith("4:")
-				|| minute.startsWith("5:") || minute.startsWith("6:") || minute.startsWith("7:")
-				|| minute.startsWith("8:") || minute.startsWith("9:")) {
+		if (minute.startsWith("1:") == true || minute.startsWith("2:") == true || minute.startsWith("3:") == true
+				|| minute.startsWith("4:") == true || minute.startsWith("5:") == true || minute.startsWith("6:") == true
+				|| minute.startsWith("7:") == true || minute.startsWith("8:") == true
+				|| minute.startsWith("9:") == true) {
 			minute = "0" + minute;
 		}
-
-		minute = minute.substring(3, 5);
 
 		return minute;
 	}
 
+	public String Hour() {
+
+		errorTest = "hour";
+
+		time();
+
+		String hour1 = minute.substring(0, 2);
+
+		hour1 = hour1.replaceFirst("^0+(?!$)", "");
+
+		if (hour1.startsWith("0") == true) {
+			hour1 = hour1.replaceFirst("^0+(?!$)", "");
+		}
+
+		System.out.println("Hour: " + hour1);
+
+		return hour1;
+
+	}
+
+	public String Minute() {
+
+		errorTest = "minute";
+
+		String minute1 = minute.substring(3, 5);
+
+		System.out.println("Minute: " + minute1);
+
+		return minute1;
+	}
+
 	public String AMPM() {
-		String ampm;
-		String pmam = "";
+
 		errorTest = "ampm";
 
-		if (round.equals("1") == true) {
+		String pmam = minute.substring(6, 8);
 
-			if (i == 3) {
-				c = 4;
-			} else {
-				c = c + 5;
-			}
-		}
-		if (round.equalsIgnoreCase("2") == true) {
-			if (i == 3) {
-				c = 7;
-			} else {
-				c = c + 10;
-			}
-		}
-		if (round.equalsIgnoreCase("3") == true) {
-			if (i == 3) {
-				c = 7;
-			} else {
-				c = c + 11;
-			}
-		}
-		if (round.equalsIgnoreCase("4") == true) {
-			if (i == 3) {
-				c = 7;
-			} else {
-				c = c + 12;
-			}
-		}
-
-		ampm = tableData[c];
-
-		System.out.println(tableData[c]);
-
-		if (ampm.startsWith("1:") == true || ampm.startsWith("2:") == true || ampm.startsWith("3:") == true
-				|| ampm.startsWith("4:") == true || ampm.startsWith("5:") == true || ampm.startsWith("6:") == true
-				|| ampm.startsWith("7:") == true || ampm.startsWith("8:") == true || ampm.startsWith("9:") == true) {
-			ampm = "0" + ampm;
-
-		}
-		pmam = ampm.substring(6, 8);
+		System.out.println("AM/PM: " + pmam);
 
 		return pmam;
 	}
@@ -465,12 +407,26 @@ public class parseAutomation {
 		}
 	}
 
-	public void leaderBoard() throws InterruptedException {
+	public void leaderBoard() throws InterruptedException, UnsupportedEncodingException {
+
+		driver.get(baseUrl);
+		String html = driver.getPageSource();
+
+		try {
+			PrintWriter writer = new PrintWriter(staticHTML);
+			writer.write(html);
+			writer.close();
+		} catch (FileNotFoundException fnf) {
+			@SuppressWarnings("unused")
+			File file = new File(staticHTML);
+		}
+
+		driver.get(staticHTMLURL);
 		if (driver.getCurrentUrl().contains("lpga") == false)
 			errorTest = "leaderboard";
 
 		{
-			// driver.get(baseUrl + "/leaderboard");
+
 			Thread.sleep(1000);
 			WebElement table = driver.findElement(By.className("live-leaderboard"));
 			Thread.sleep(500);
@@ -495,7 +451,9 @@ public class parseAutomation {
 
 		for (String s : tableData) {
 			if (s != null && s.length() > 0) {
-				if (s.contains("<BODY") == true || s.contains("Cut Line")) {
+				if (s.contains("<BODY") == true || s.contains("Cut Line") == true
+						|| s.contains("My Leaderboard") == true || s.contains("Full Leaderboard")
+						|| s.equalsIgnoreCase("Add") || s.contains("View Player Profile") || s.contains("&")) {
 				} else {
 					list.add(s);
 				}
@@ -503,6 +461,9 @@ public class parseAutomation {
 		}
 
 		tableData = list.toArray(new String[list.size()]);
+
+		System.out.print(Arrays.toString(tableData));
+
 		i = 3;
 		writeLeaderboard();
 	}
@@ -511,22 +472,22 @@ public class parseAutomation {
 
 		deliveryDate = tearApart.substring(0, 10);
 		deliveryDate = deliveryDate.trim();
-		System.out.println(deliveryDate);
+		// System.out.println(deliveryDate);
 
 		Hour = tearApart.substring(11, 13);
 		if (Hour.startsWith("0")) {
 			Hour = Hour.replaceFirst("^0+(?!$)", "");
 		}
 		Hour = Hour.trim();
-		System.out.println(Hour);
+		// System.out.println(Hour);
 
 		Minute = tearApart.substring(14, 16);
 		Minute = Minute.trim();
-		System.out.println(Minute);
+		// System.out.println(Minute);
 
 		aMpM = tearApart.substring(17, 19);
 		aMpM = aMpM.trim();
-		System.out.println(aMpM);
+		// System.out.println(aMpM);
 	}
 
 	public void Parse(String player, String Round, String hour, String min, String AM)
@@ -534,11 +495,13 @@ public class parseAutomation {
 		errorTest = "parse";
 
 		String conDate = deliveryDate + " " + hour + ":" + min + " " + AM;
-		System.out.println(player);
+		System.out.println("Player: " + player);
 
 		tearApart = setEST(conDate);
 
 		takeApartNewDate();
+
+		System.out.print("Player: " + player + "    Round: " + Round + "  Time:  " + hour + min + AM);
 
 		try {
 
@@ -548,10 +511,10 @@ public class parseAutomation {
 			driver.manage().deleteAllCookies();
 			driver.get("https://www.parse.com/user_session/new");
 
-			driver.findElement(By.id("user_session_email")).sendKeys("jake.brokaw@lpga.com");
-			driver.findElement(By.id("user_session_password")).clear();
-			driver.findElement(By.id("user_session_password")).sendKeys("ChangX31");
-			driver.findElement(By.className("submit")).click();
+			driver.findElement(By.name("user_session[email]")).sendKeys("jake.brokaw@lpga.com");
+			driver.findElement(By.name("user_session[password]")).clear();
+			driver.findElement(By.name("user_session[password]")).sendKeys("ChangX31");
+			driver.findElement(By.className("submit__AiNYw")).click();
 
 			driver.navigate().to("https://www.parse.com/apps/lpga-now/push_notifications");
 			Thread.sleep(2000);
