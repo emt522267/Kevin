@@ -453,7 +453,8 @@ public class parseAutomation {
 			if (s != null && s.length() > 0) {
 				if (s.contains("<BODY") == true || s.contains("Cut Line") == true
 						|| s.contains("My Leaderboard") == true || s.contains("Full Leaderboard")
-						|| s.equalsIgnoreCase("Add") || s.contains("View Player Profile") || s.contains("&")) {
+						|| s.equalsIgnoreCase("Add") == true || s.contains("View Player Profile") == true
+						|| s.contains("&") == true) {
 				} else {
 					list.add(s);
 				}
@@ -492,11 +493,9 @@ public class parseAutomation {
 
 	public void Parse(String player, String Round, String hour, String min, String AM)
 			throws AWTException, InterruptedException, ParseException {
+
 		errorTest = "parse";
-
 		String conDate = deliveryDate + " " + hour + ":" + min + " " + AM;
-		System.out.println("Player: " + player);
-
 		tearApart = setEST(conDate);
 
 		takeApartNewDate();
@@ -588,16 +587,16 @@ public class parseAutomation {
 			fail(verificationErrorString);
 		}
 		if (i >= tableData.length || finish == true) {
-			JOptionPane.showMessageDialog(null, "Success! Please review Parse entries.");
+			JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete() + ". "  
+					+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
 		} else {
 
 			if (errorex == "") {
-				JOptionPane.showMessageDialog(null,
-						"Error occured.  Please vist C:\\LPGA Errors.txt  "
-								+ "\nIf this file does not exist, please create it and next time you will have an error log."
-								+ "\nTime to complete: " + time);
+				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete() + ". "  
+						+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
 			} else {
-				JOptionPane.showMessageDialog(null, "Success! Please review Parse entries.");
+				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete() + ". "  
+						+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
 			}
 		}
 
