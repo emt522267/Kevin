@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
@@ -70,6 +71,7 @@ public class parseAutomation {
 	String errorFile = "c:/LPGA/LPGA Errors.txt";
 	String staticHTML = "C:/LPGA/staticHTML.html";
 	String staticHTMLURL = "file:///C:/LPGA/staticHTML.html";
+	String debugFile = "";
 
 	public static void main(String[] args) {
 		JUnitCore.main("Parse.Automation.parseAutomation");
@@ -80,8 +82,7 @@ public class parseAutomation {
 
 		driver = new FirefoxDriver();
 		driver2 = new FirefoxDriver();
-		baseUrl = "C:\\Users\\kevin.anderson\\Desktop\\Leaderboard _ LPGA _ Ladies Professional Golf Association.html";
-		// "http://lpga.com/leaderboard";
+		baseUrl = "http://lpga.com/leaderboard";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 	}
@@ -95,6 +96,26 @@ public class parseAutomation {
 		deliveryDate = JOptionPane
 				.showInputDialog("Please enter the date to deliver the notifications.\nUse YYYY/MM/DD format.");
 
+		if (round.equalsIgnoreCase("debug") == true) {
+
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(null);
+
+			File selectedFile = null;
+
+			if (result == JFileChooser.APPROVE_OPTION) {
+				selectedFile = fileChooser.getSelectedFile();
+				System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+			} else {
+				JOptionPane.showMessageDialog(null, "Error", "Please choose a file", JOptionPane.ERROR_MESSAGE);
+			}
+
+			debugFile = selectedFile.getAbsolutePath();
+
+			round = JOptionPane.showInputDialog("DEBUG MODE:  Please Enter Correct Round");
+		}
+		
 		if (round.equalsIgnoreCase("1") == true) {
 			tournamentName = JOptionPane.showInputDialog(
 					"Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");
@@ -195,41 +216,23 @@ public class parseAutomation {
 
 	public String Position() {
 
-		errorTest = "position";
-		if (round.equals("1") == true) {
-
-			if (i == 3) {
-				f = 1;
-			} else {
-				f = f + 5;
-			}
-		}
-		if (round.equalsIgnoreCase("2") == true) {
-			if (i == 3) {
-				f = 1;
-			} else {
-				f = f + 10;
-			}
-		}
-
-		if (round.equalsIgnoreCase("3") == true) {
-			if (i == 3) {
-				f = 1;
-			} else {
-				f = f + 11;
-			}
-		}
-
-		if (round.equalsIgnoreCase("4") == true) {
-			if (i == 3) {
-				f = 1;
-			} else {
-				f = f + 12;
-			}
-		}
-
-		String position = tableData[f];
-		System.out.println("Position: " + position);
+		/*
+		 * errorTest = "position"; if (round.equals("1") == true) {
+		 * 
+		 * if (i == 3) { f = 1; } else { f = f + 4; } } if
+		 * (round.equalsIgnoreCase("2") == true) { if (i == 3) { f = 1; } else {
+		 * f = f + 10; } }
+		 * 
+		 * if (round.equalsIgnoreCase("3") == true) { if (i == 3) { f = 1; }
+		 * else { f = f + 11; } }
+		 * 
+		 * if (round.equalsIgnoreCase("4") == true) { if (i == 3) { f = 1; }
+		 * else { f = f + 12; } }
+		 * 
+		 * String position = tableData[f]; System.out.println("Position: " +
+		 * position);
+		 */
+		String position = "1";
 		return position;
 	}
 
@@ -240,7 +243,7 @@ public class parseAutomation {
 			if (i == 3) {
 				d = 2;
 			} else {
-				d = d + 4;
+				d = d + 5;
 			}
 		}
 		if (round.equalsIgnoreCase("2") == true) {
@@ -314,7 +317,7 @@ public class parseAutomation {
 			if (i == 3) {
 				a = 3;
 			} else {
-				a = a + 4;
+				a = a + 5;
 			}
 		}
 		if (round.equalsIgnoreCase("2") == true) {
@@ -409,7 +412,12 @@ public class parseAutomation {
 
 	public void leaderBoard() throws InterruptedException, UnsupportedEncodingException {
 
-		driver.get(baseUrl);
+		if (debugFile == "") {
+			driver.get(baseUrl);
+		} else {
+			driver.get("file:///" + debugFile);
+		}
+
 		String html = driver.getPageSource();
 
 		try {
@@ -453,8 +461,7 @@ public class parseAutomation {
 			if (s != null && s.length() > 0) {
 				if (s.contains("<BODY") == true || s.contains("Cut Line") == true
 						|| s.contains("My Leaderboard") == true || s.contains("Full Leaderboard")
-						|| s.equalsIgnoreCase("Add") == true || s.contains("View Player Profile") == true
-						|| s.contains("&") == true) {
+						|| s.equalsIgnoreCase("Add") == true || s.contains("&") == true) {
 				} else {
 					list.add(s);
 				}
@@ -575,6 +582,7 @@ public class parseAutomation {
 		}
 
 		i++;
+
 	}
 
 	@After
@@ -587,15 +595,18 @@ public class parseAutomation {
 			fail(verificationErrorString);
 		}
 		if (i >= tableData.length || finish == true) {
-			JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete() + ". "  
+			JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete()
+					+ ". "
 					+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
 		} else {
 
 			if (errorex == "") {
-				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete() + ". "  
+				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + "\n"
+						+ percentComplete()
 						+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
 			} else {
-				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete() + ". "  
+				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " "
+						+ percentComplete() + ". "
 						+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
 			}
 		}
