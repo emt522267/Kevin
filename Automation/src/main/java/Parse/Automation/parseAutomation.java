@@ -36,6 +36,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
+	String version = "V1.0.0";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl;
@@ -90,7 +91,7 @@ public class parseAutomation {
 	@Test
 	public void test() throws Exception {
 
-		System.out.println("Get Ready to be Parsified!!!");
+		System.out.println(version + "\nGet Ready to be Parsified!!!\n");
 		errorTest = "Test";
 		round = JOptionPane.showInputDialog("Please Enter Round");
 		deliveryDate = JOptionPane
@@ -115,7 +116,7 @@ public class parseAutomation {
 
 			round = JOptionPane.showInputDialog("DEBUG MODE:  Please Enter Correct Round");
 		}
-		
+
 		if (round.equalsIgnoreCase("1") == true) {
 			tournamentName = JOptionPane.showInputDialog(
 					"Please enter the tournament name \n(i.e.- Sontaran Classic presented by Gallifrey Bank).");
@@ -216,23 +217,44 @@ public class parseAutomation {
 
 	public String Position() {
 
-		/*
-		 * errorTest = "position"; if (round.equals("1") == true) {
-		 * 
-		 * if (i == 3) { f = 1; } else { f = f + 4; } } if
-		 * (round.equalsIgnoreCase("2") == true) { if (i == 3) { f = 1; } else {
-		 * f = f + 10; } }
-		 * 
-		 * if (round.equalsIgnoreCase("3") == true) { if (i == 3) { f = 1; }
-		 * else { f = f + 11; } }
-		 * 
-		 * if (round.equalsIgnoreCase("4") == true) { if (i == 3) { f = 1; }
-		 * else { f = f + 12; } }
-		 * 
-		 * String position = tableData[f]; System.out.println("Position: " +
-		 * position);
-		 */
-		String position = "1";
+		errorTest = "position";
+
+		if (round.equals("1") == true) {
+
+			if (i == 3) {
+				f = 1;
+			} else {
+				f = f + 4;
+			}
+		}
+
+		if (round.equalsIgnoreCase("2") == true) {
+			if (i == 3) {
+				f = 1;
+			} else {
+				f = f + 10;
+			}
+		}
+
+		if (round.equalsIgnoreCase("3") == true) {
+			if (i == 3) {
+				f = 1;
+			} else {
+				f = f + 11;
+			}
+		}
+
+		if (round.equalsIgnoreCase("4") == true) {
+			if (i == 3) {
+				f = 0;
+			} else {
+				f = f + 12;
+			}
+		}
+
+		String position = tableData[f];
+		System.out.println("Position: " + position);
+
 		return position;
 	}
 
@@ -248,7 +270,7 @@ public class parseAutomation {
 		}
 		if (round.equalsIgnoreCase("2") == true) {
 			if (i == 3) {
-				d = 5;
+				d = 4;
 			} else {
 				d = d + 10;
 			}
@@ -256,7 +278,7 @@ public class parseAutomation {
 
 		if (round.equalsIgnoreCase("3") == true) {
 			if (i == 3) {
-				d = 5;
+				d = 4;
 			} else {
 				d = d + 11;
 			}
@@ -264,7 +286,7 @@ public class parseAutomation {
 
 		if (round.equalsIgnoreCase("4") == true) {
 			if (i == 3) {
-				d = 5;
+				d = 4;
 			} else {
 				d = d + 12;
 			}
@@ -322,21 +344,21 @@ public class parseAutomation {
 		}
 		if (round.equalsIgnoreCase("2") == true) {
 			if (i == 3) {
-				a = 7;
+				a = 6;
 			} else {
 				a = a + 10;
 			}
 		}
 		if (round.equalsIgnoreCase("3") == true) {
 			if (i == 3) {
-				a = 7;
+				a = 6;
 			} else {
 				a = a + 11;
 			}
 		}
 		if (round.equalsIgnoreCase("4") == true) {
 			if (i == 3) {
-				a = 7;
+				a = 6;
 			} else {
 				a = a + 12;
 			}
@@ -522,6 +544,15 @@ public class parseAutomation {
 			driver.findElement(By.name("user_session[password]")).sendKeys("ChangX31");
 			driver.findElement(By.className("submit__AiNYw")).click();
 
+			try
+			{
+				driver.findElement(By.linkText("Continue")).click();
+			}
+			catch (Exception ex)
+			{
+				
+			}
+			
 			driver.navigate().to("https://www.parse.com/apps/lpga-now/push_notifications");
 			Thread.sleep(2000);
 			driver.findElement(By.linkText("Send a push")).click();
