@@ -52,6 +52,7 @@
 	<classpathentry exported="true" kind="lib" path="C:/Users/kevin.anderson/Downloads/selenium-2.45.0/libs/xalan-2.7.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/kevin.anderson/Downloads/selenium-2.45.0/libs/xercesImpl-2.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/kevin.anderson/Downloads/selenium-2.45.0/libs/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="C:/LPGA/chromedriver_win32.zip"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/kevin.anderson/Downloads/java-json.jar"/>
 	<classpathentry kind="output" path="target/classes"/>

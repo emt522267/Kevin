@@ -31,15 +31,15 @@ import org.junit.*;
 import org.junit.runner.JUnitCore;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	String version = "V1.0.0";
+	String version = "V1.1.0";
 	private WebDriver driver;
 	private WebDriver driver2;
-	private String baseUrl;
+	private String baseUrl = "http://lpga.com/leaderboard";
 	private StringBuffer verificationErrors = new StringBuffer();
 	String Player;
 	String Time;
@@ -81,9 +81,11 @@ public class parseAutomation {
 	@Before
 	public void setUp() throws Exception {
 
-		driver = new FirefoxDriver();
-		driver2 = new FirefoxDriver();
-		baseUrl = "http://lpga.com/leaderboard";
+		System.setProperty("webdriver.chrome.driver", "C:\\LPGA\\chromedriver_win32\\chromedriver.exe");
+
+		driver = new ChromeDriver();
+		driver2 = new ChromeDriver();
+		//baseUrl = "http://lpga.com/leaderboard";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 	}
@@ -222,7 +224,7 @@ public class parseAutomation {
 		if (round.equals("1") == true) {
 
 			if (i == 3) {
-				f = 1;
+				f = 0;
 			} else {
 				f = f + 4;
 			}
@@ -230,7 +232,7 @@ public class parseAutomation {
 
 		if (round.equalsIgnoreCase("2") == true) {
 			if (i == 3) {
-				f = 1;
+				f = 0;
 			} else {
 				f = f + 10;
 			}
@@ -238,7 +240,7 @@ public class parseAutomation {
 
 		if (round.equalsIgnoreCase("3") == true) {
 			if (i == 3) {
-				f = 1;
+				f = 0;
 			} else {
 				f = f + 11;
 			}
@@ -544,15 +546,12 @@ public class parseAutomation {
 			driver.findElement(By.name("user_session[password]")).sendKeys("ChangX31");
 			driver.findElement(By.className("submit__AiNYw")).click();
 
-			try
-			{
+			try {
 				driver.findElement(By.linkText("Continue")).click();
+			} catch (Exception ex) {
+
 			}
-			catch (Exception ex)
-			{
-				
-			}
-			
+
 			driver.navigate().to("https://www.parse.com/apps/lpga-now/push_notifications");
 			Thread.sleep(2000);
 			driver.findElement(By.linkText("Send a push")).click();
@@ -627,18 +626,15 @@ public class parseAutomation {
 		}
 		if (i >= tableData.length || finish == true) {
 			JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " " + percentComplete()
-					+ ". "
-					+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
+					+ ". " + ".  \nThank you for choosing PusH");
 		} else {
 
 			if (errorex == "") {
 				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + "\n"
-						+ percentComplete()
-						+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
+						+ percentComplete() + ".  \nThank you for choosing PusH");
 			} else {
 				JOptionPane.showMessageDialog(null, "Completed " + a + " of " + tableData.length + " "
-						+ percentComplete() + ". "
-						+ ".  \nThank you for choosing \nThe Awesome Parse Maker Thingy \npowered by Kevin Anderson");
+						+ percentComplete() + ". " + ".  \nThank you for choosing PusH");
 			}
 		}
 
