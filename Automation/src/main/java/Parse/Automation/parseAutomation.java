@@ -18,10 +18,14 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.JWindow;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -36,7 +40,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	String version = "V1.1.0";
+	static String version = "V1.1.0";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl = "http://lpga.com/leaderboard";
@@ -75,12 +79,19 @@ public class parseAutomation {
 	String debugFile = "";
 
 	public static void main(String[] args) {
+		
+		//SplashDemo splash = new SplashDemo();
+		
 		JUnitCore.main("Parse.Automation.parseAutomation");
 	}
+	
+	
 
 	@Before
 	public void setUp() throws Exception {
 
+	//	SplashDemo.splashRun();
+		
 		System.setProperty("webdriver.chrome.driver", "C:\\LPGA\\chromedriver_win32\\chromedriver.exe");
 
 		driver = new ChromeDriver();
