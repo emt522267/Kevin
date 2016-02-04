@@ -79,24 +79,22 @@ public class parseAutomation {
 	String debugFile = "";
 
 	public static void main(String[] args) {
-		
-		//SplashDemo splash = new SplashDemo();
-		
+
+		// SplashDemo splash = new SplashDemo();
+
 		JUnitCore.main("Parse.Automation.parseAutomation");
 	}
-	
-	
 
 	@Before
 	public void setUp() throws Exception {
 
-	//	SplashDemo.splashRun();
-		
+		// SplashDemo.splashRun();
+
 		System.setProperty("webdriver.chrome.driver", "C:\\LPGA\\chromedriver_win32\\chromedriver.exe");
 
 		driver = new ChromeDriver();
 		driver2 = new ChromeDriver();
-		//baseUrl = "http://lpga.com/leaderboard";
+		// baseUrl = "http://lpga.com/leaderboard";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 	}
