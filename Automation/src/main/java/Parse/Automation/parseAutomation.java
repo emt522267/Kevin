@@ -73,10 +73,14 @@ public class parseAutomation {
 	String PCstaticHTML = "C:/LPGA/staticHTML.html";
 	String PCstaticHTMLURL = "file:///C:/LPGA/staticHTML.html";
 	String PCdebugFile = "";
-	String MACleaderboardFile = "c:/LPGA/Leaderboard.txt";
-	String MACerrorFile = "c:/LPGA/LPGA Errors.txt";
-	String MACstaticHTML = "C:/LPGA/staticHTML.html";
-	String MACstaticHTMLURL = "file:///C:/LPGA/staticHTML.html";
+	
+	
+	
+	String homeDir;
+	String MACleaderboardFile = "";
+	String MACerrorFile = "";
+	String MACstaticHTML = "";
+	String MACstaticHTMLURL = "";
 	String MACdebugFile = "";
 	String PC;
 
@@ -102,8 +106,23 @@ public class parseAutomation {
 		getOS();
 
 	}
+	
+	public void setMacVariables()
+	{
+		homeDir = System.getProperty("user.home");
+		homeDir = homeDir + "/Desktop/";
+		homeDir.replace("//", "/");
+		MACleaderboardFile = homeDir + "LPGA/Leaderboard.txt";
+		MACerrorFile = homeDir + "LPGA/LPGA Errors.txt";
+		MACstaticHTML = homeDir + "LPGA/staticHTML.html";
+		MACstaticHTMLURL = "file:///" + homeDir + "LPGA/staticHTML.html";
+		MACdebugFile = "";
+	}
 
 	public void getOS() {
+		
+		 
+		
 		String OS = System.getProperty("os.name");
 		System.out.println(System.getProperty("os.name"));
 		if (OS.contains("Windows") == true) {
