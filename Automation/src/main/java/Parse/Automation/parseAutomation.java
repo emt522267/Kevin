@@ -104,6 +104,7 @@ public class parseAutomation {
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 		getOS();
+		setMacVariables();
 
 	}
 	
