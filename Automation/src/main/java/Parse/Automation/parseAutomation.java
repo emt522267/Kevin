@@ -18,14 +18,10 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
-import javax.swing.JWindow;
-import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -40,7 +36,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	static String version = "V1.1.0";
+	static String version = "V2.0.1";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl = "http://lpga.com/leaderboard";
@@ -72,11 +68,17 @@ public class parseAutomation {
 	JProgressBar progressBar = new JProgressBar();
 	JFrame pf = new JFrame("Progress");
 	String errorex = "";
-	String leaderboardFile = "c:/LPGA/Leaderboard.txt";
-	String errorFile = "c:/LPGA/LPGA Errors.txt";
-	String staticHTML = "C:/LPGA/staticHTML.html";
-	String staticHTMLURL = "file:///C:/LPGA/staticHTML.html";
-	String debugFile = "";
+	String PCleaderboardFile = "c:/LPGA/Leaderboard.txt";
+	String PCerrorFile = "c:/LPGA/LPGA Errors.txt";
+	String PCstaticHTML = "C:/LPGA/staticHTML.html";
+	String PCstaticHTMLURL = "file:///C:/LPGA/staticHTML.html";
+	String PCdebugFile = "";
+	String MACleaderboardFile = "c:/LPGA/Leaderboard.txt";
+	String MACerrorFile = "c:/LPGA/LPGA Errors.txt";
+	String MACstaticHTML = "C:/LPGA/staticHTML.html";
+	String MACstaticHTMLURL = "file:///C:/LPGA/staticHTML.html";
+	String MACdebugFile = "";
+	String PC;
 
 	public static void main(String[] args) {
 
@@ -97,6 +99,18 @@ public class parseAutomation {
 		// baseUrl = "http://lpga.com/leaderboard";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
+		getOS();
+
+	}
+
+	public void getOS() {
+		String OS = System.getProperty("os.name");
+		System.out.println(System.getProperty("os.name"));
+		if (OS.contains("Windows") == true) {
+			PC = "PC";
+		} else {
+			PC = "MAC";
+		}
 	}
 
 	@Test
@@ -123,7 +137,11 @@ public class parseAutomation {
 				JOptionPane.showMessageDialog(null, "Error", "Please choose a file", JOptionPane.ERROR_MESSAGE);
 			}
 
-			debugFile = selectedFile.getAbsolutePath();
+			if (PC.equalsIgnoreCase("PC")) {
+				PCdebugFile = selectedFile.getAbsolutePath();
+			} else {
+				MACdebugFile = selectedFile.getAbsolutePath();
+			}
 
 			round = JOptionPane.showInputDialog("DEBUG MODE:  Please Enter Correct Round");
 		}
@@ -152,30 +170,58 @@ public class parseAutomation {
 
 	public void writeLeaderboard() throws FileNotFoundException, UnsupportedEncodingException {
 
-		try {
+		if (PC.equalsIgnoreCase("PC")) {
 
-			PrintWriter writer = new PrintWriter(leaderboardFile, "UTF-8");
-			for (int z = 0; z < tableData.length; z++) {
-				writer.write("\n  " + i + " " + tableData[z] + " \n ");
+			try {
+
+				PrintWriter writer = new PrintWriter(PCleaderboardFile, "UTF-8");
+				for (int z = 0; z < tableData.length; z++) {
+					writer.write("\n  " + i + " " + tableData[z] + " \n ");
+				}
+				writer.close();
+			} catch (FileNotFoundException fnf) {
+				@SuppressWarnings("unused")
+				File file = new File(PCleaderboardFile);
 			}
-			writer.close();
-		} catch (FileNotFoundException fnf) {
-			@SuppressWarnings("unused")
-			File file = new File(leaderboardFile);
+		} else {
+			try {
+
+				PrintWriter writer = new PrintWriter(MACleaderboardFile, "UTF-8");
+				for (int z = 0; z < tableData.length; z++) {
+					writer.write("\n  " + i + " " + tableData[z] + " \n ");
+				}
+				writer.close();
+			} catch (FileNotFoundException fnf) {
+				@SuppressWarnings("unused")
+				File file = new File(MACleaderboardFile);
+			}
 		}
 	}
 
 	public void writeErrors() throws FileNotFoundException, UnsupportedEncodingException {
 
-		try {
-			PrintWriter writer = new PrintWriter(errorFile, "UTF-8");
-			for (int u = 0; u < errors.length; u++) {
-				writer.write(errors[u] + " \n " + errorTest);
+		if (PC.equalsIgnoreCase("PC")) {
+			try {
+				PrintWriter writer = new PrintWriter(PCerrorFile, "UTF-8");
+				for (int u = 0; u < errors.length; u++) {
+					writer.write(errors[u] + " \n " + errorTest);
+				}
+				writer.close();
+			} catch (FileNotFoundException fnf) {
+				@SuppressWarnings("unused")
+				File file = new File(PCerrorFile);
 			}
-			writer.close();
-		} catch (FileNotFoundException fnf) {
-			@SuppressWarnings("unused")
-			File file = new File(errorFile);
+		} else {
+			try {
+				PrintWriter writer = new PrintWriter(MACerrorFile, "UTF-8");
+				for (int u = 0; u < errors.length; u++) {
+					writer.write(errors[u] + " \n " + errorTest);
+				}
+				writer.close();
+			} catch (FileNotFoundException fnf) {
+				@SuppressWarnings("unused")
+				File file = new File(MACerrorFile);
+			}
 		}
 	}
 
@@ -445,42 +491,85 @@ public class parseAutomation {
 
 	public void leaderBoard() throws InterruptedException, UnsupportedEncodingException {
 
-		if (debugFile == "") {
-			driver.get(baseUrl);
+		if (PC.equalsIgnoreCase("PC")) {
+
+			if (PCdebugFile == "") {
+				driver.get(baseUrl);
+			} else {
+				driver.get("file:///" + PCdebugFile);
+			}
+
+			String html = driver.getPageSource();
+
+			try {
+				PrintWriter writer = new PrintWriter(PCstaticHTML);
+				writer.write(html);
+				writer.close();
+			} catch (FileNotFoundException fnf) {
+				@SuppressWarnings("unused")
+				File file = new File(PCstaticHTML);
+			}
+
+			driver.get(PCstaticHTMLURL);
+			if (driver.getCurrentUrl().contains("lpga") == false)
+				errorTest = "leaderboard";
+
+			{
+
+				Thread.sleep(1000);
+				WebElement table = driver.findElement(By.className("live-leaderboard"));
+				Thread.sleep(500);
+				List<WebElement> allRows = table.findElements(By.tagName("TR"));
+
+				for (WebElement row : allRows) {
+					List<WebElement> cells = row.findElements(By.tagName("TD"));
+					for (WebElement cell : cells) {
+						String a = cell.getText().toString();
+						tableData[i] = a;
+
+						System.out.println(i + " " + tableData[i]);
+						i++;
+					}
+				}
+			}
 		} else {
-			driver.get("file:///" + debugFile);
-		}
+			if (MACdebugFile == "") {
+				driver.get(baseUrl);
+			} else {
+				driver.get("file:///" + MACdebugFile);
+			}
 
-		String html = driver.getPageSource();
+			String html = driver.getPageSource();
 
-		try {
-			PrintWriter writer = new PrintWriter(staticHTML);
-			writer.write(html);
-			writer.close();
-		} catch (FileNotFoundException fnf) {
-			@SuppressWarnings("unused")
-			File file = new File(staticHTML);
-		}
+			try {
+				PrintWriter writer = new PrintWriter(MACstaticHTML);
+				writer.write(html);
+				writer.close();
+			} catch (FileNotFoundException fnf) {
+				@SuppressWarnings("unused")
+				File file = new File(MACstaticHTML);
+			}
 
-		driver.get(staticHTMLURL);
-		if (driver.getCurrentUrl().contains("lpga") == false)
-			errorTest = "leaderboard";
+			driver.get(MACstaticHTMLURL);
+			if (driver.getCurrentUrl().contains("lpga") == false)
+				errorTest = "leaderboard";
 
-		{
+			{
 
-			Thread.sleep(1000);
-			WebElement table = driver.findElement(By.className("live-leaderboard"));
-			Thread.sleep(500);
-			List<WebElement> allRows = table.findElements(By.tagName("TR"));
+				Thread.sleep(1000);
+				WebElement table = driver.findElement(By.className("live-leaderboard"));
+				Thread.sleep(500);
+				List<WebElement> allRows = table.findElements(By.tagName("TR"));
 
-			for (WebElement row : allRows) {
-				List<WebElement> cells = row.findElements(By.tagName("TD"));
-				for (WebElement cell : cells) {
-					String a = cell.getText().toString();
-					tableData[i] = a;
+				for (WebElement row : allRows) {
+					List<WebElement> cells = row.findElements(By.tagName("TD"));
+					for (WebElement cell : cells) {
+						String a = cell.getText().toString();
+						tableData[i] = a;
 
-					System.out.println(i + " " + tableData[i]);
-					i++;
+						System.out.println(i + " " + tableData[i]);
+						i++;
+					}
 				}
 			}
 		}

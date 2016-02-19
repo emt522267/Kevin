@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.*;
+import org.junit.runner.JUnitCore;
+
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -20,10 +22,23 @@ public class FTISocialCrawl {
 	String[] errors = new String[7000];
 	int c = 0;
 	int p = 0;
+	String errorTxtFile = "C:\\Users\\kevin.anderson\\Desktop\\errors.txt";
+	String csvFile = "C:\\Users\\kevin.anderson\\Desktop\\book1.csv";
+	
+	
+	/* Application takes a one column CSV(csvFile) of URLs and crawls the URLs to verify that an element is present.
+	 * It will then output the URLs that were missing the element in the file stored at errorTxtFile.
+	 * Incoming CSV is a one column table.  This code cannot handle 2 columns of data at this time. 
+	 */
+	
+	public static void main(String[] args) {
+		
+		JUnitCore.main("FTISocialCrawl");
+	}
 
 	public void writeFile() {
 		try {
-			PrintWriter writer = new PrintWriter("C:\\Users\\kevin.anderson\\Desktop\\errors.txt", "UTF-8");
+			PrintWriter writer = new PrintWriter(errorTxtFile, "UTF-8");
 			for (int z = 0; z < errors.length; z++) {
 				writer.write("\n  " + i + " " + errors[z] + " \n ");
 			}
@@ -47,7 +62,7 @@ public class FTISocialCrawl {
 		CsvParser parser = new CsvParser(settings);
 
 		try {
-			resolvedData = parser.parseAll(new FileReader("C:\\Users\\kevin.anderson\\Desktop\\book1.csv"));
+			resolvedData = parser.parseAll(new FileReader(csvFile));
 			array = new String[resolvedData.size()][];
 			resolvedData.toArray(array);
 		} catch (Exception ex) {
@@ -73,11 +88,10 @@ public class FTISocialCrawl {
 			t = 100 * (g / e);
 			d = df.format(t);
 			String url = array[i][0].toLowerCase();
-			// System.out.println(i + ") " + url + " - " + d + "%");
-
+			
 			if (url.contains("pdf") == true || url.contains("vcf") == true || url.contains("jpg") == true
 					|| url.contains("jpeg") == true) {
-				// System.out.println("PDF OR VCF");
+				
 				i++;
 			}
 
