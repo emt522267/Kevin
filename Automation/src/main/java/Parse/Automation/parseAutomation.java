@@ -73,9 +73,6 @@ public class parseAutomation {
 	String PCstaticHTML = "C:/LPGA/staticHTML.html";
 	String PCstaticHTMLURL = "file:///C:/LPGA/staticHTML.html";
 	String PCdebugFile = "";
-	
-	
-	
 	String homeDir;
 	String MACleaderboardFile = "";
 	String MACerrorFile = "";
@@ -96,16 +93,23 @@ public class parseAutomation {
 
 		// SplashDemo.splashRun();
 
-		System.setProperty("webdriver.chrome.driver", "C:\\LPGA\\chromedriver_win32\\chromedriver.exe");
+		chromeDriverSetup();
+
+		getOS();
+		setMacVariables();
+
+	}
+	
+	public void chromeDriverSetup()
+	{
+		String chromeDriver = System.getProperty("user.home");
+		chromeDriver = chromeDriver + "/Desktop/LPGA/chromedriver";
+		System.setProperty("webdriver.chrome.driver", chromeDriver);
 
 		driver = new ChromeDriver();
 		driver2 = new ChromeDriver();
 		// baseUrl = "http://lpga.com/leaderboard";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
-		getOS();
-		setMacVariables();
-
 	}
 	
 	public void setMacVariables()
