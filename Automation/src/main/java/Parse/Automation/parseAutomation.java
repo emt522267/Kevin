@@ -36,7 +36,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	static String version = "V2.0.1";
+	static String version = "V2.1.0";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl = "http://lpga.com/leaderboard";
@@ -93,27 +93,34 @@ public class parseAutomation {
 
 		// SplashDemo.splashRun();
 
-		chromeDriverSetup();
-
 		getOS();
 		setMacVariables();
+		chromeDriverSetup();
 
 	}
-	
-	public void chromeDriverSetup()
-	{
-		String chromeDriver = System.getProperty("user.home");
-		chromeDriver = chromeDriver + "/Desktop/LPGA/chromedriver";
-		System.setProperty("webdriver.chrome.driver", chromeDriver);
 
-		driver = new ChromeDriver();
-		driver2 = new ChromeDriver();
-		// baseUrl = "http://lpga.com/leaderboard";
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+	public void chromeDriverSetup() {
+		if (PC == "Mac") {
+			String chromeDriver = System.getProperty("user.home");
+			chromeDriver = chromeDriver + "/Desktop/LPGA/chromedriver";
+			System.setProperty("webdriver.chrome.driver", chromeDriver);
+			driver = new ChromeDriver();
+			driver2 = new ChromeDriver();
+			// baseUrl = "http://lpga.com/leaderboard";
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+		} else {
+
+			System.setProperty("webdriver.chrome.driver", "C:\\LPGA\\chromedriver_win32\\chromedriver.exe");
+			 
+			driver = new ChromeDriver();
+			driver2 = new ChromeDriver();
+			//baseUrl = "http://lpga.com/leaderboard";
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		}
 	}
-	
-	public void setMacVariables()
-	{
+
+	public void setMacVariables() {
 		homeDir = System.getProperty("user.home");
 		homeDir = homeDir + "/Desktop/";
 		homeDir.replace("//", "/");
@@ -125,9 +132,7 @@ public class parseAutomation {
 	}
 
 	public void getOS() {
-		
-		 
-		
+
 		String OS = System.getProperty("os.name");
 		System.out.println(System.getProperty("os.name"));
 		if (OS.contains("Windows") == true) {
