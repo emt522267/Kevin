@@ -36,7 +36,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	static String version = "V2.1.0";
+	static String version = "V2.1.3";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl = "http://lpga.com/leaderboard";
@@ -68,10 +68,10 @@ public class parseAutomation {
 	JProgressBar progressBar = new JProgressBar();
 	JFrame pf = new JFrame("Progress");
 	String errorex = "";
-	String PCleaderboardFile = "c:/LPGA/Leaderboard.txt";
-	String PCerrorFile = "c:/LPGA/LPGA Errors.txt";
-	String PCstaticHTML = "C:/LPGA/staticHTML.html";
-	String PCstaticHTMLURL = "file:///C:/LPGA/staticHTML.html";
+	String PCleaderboardFile = "c:/PusH/Leaderboard.txt";
+	String PCerrorFile = "c:/PusH/LPGA Errors.txt";
+	String PCstaticHTML = "C:/PusH/staticHTML.html";
+	String PCstaticHTMLURL = "file:///C:/PusH/staticHTML.html";
 	String PCdebugFile = "";
 	String homeDir;
 	String MACleaderboardFile = "";
@@ -94,28 +94,29 @@ public class parseAutomation {
 		// SplashDemo.splashRun();
 
 		getOS();
-		setMacVariables();
+		
 		chromeDriverSetup();
 
 	}
 
 	public void chromeDriverSetup() {
-		if (PC == "Mac") {
+		if (PC.equalsIgnoreCase("Mac") == true) {
 			String chromeDriver = System.getProperty("user.home");
-			chromeDriver = chromeDriver + "/Desktop/LPGA/chromedriver";
+			chromeDriver = chromeDriver + "/Desktop/PusH/chromedriver";
 			System.setProperty("webdriver.chrome.driver", chromeDriver);
 			driver = new ChromeDriver();
 			driver2 = new ChromeDriver();
-			// baseUrl = "http://lpga.com/leaderboard";
+			baseUrl = "http://lpga.com/leaderboard";
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			setMacVariables();
 
 		} else {
 
-			System.setProperty("webdriver.chrome.driver", "C:\\LPGA\\chromedriver_win32\\chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", "C:\\PusH\\chromedriver_win32\\chromedriver.exe");
 			 
 			driver = new ChromeDriver();
 			driver2 = new ChromeDriver();
-			//baseUrl = "http://lpga.com/leaderboard";
+			baseUrl = "http://lpga.com/leaderboard";
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		}
 	}
@@ -124,10 +125,10 @@ public class parseAutomation {
 		homeDir = System.getProperty("user.home");
 		homeDir = homeDir + "/Desktop/";
 		homeDir.replace("//", "/");
-		MACleaderboardFile = homeDir + "LPGA/Leaderboard.txt";
-		MACerrorFile = homeDir + "LPGA/LPGA Errors.txt";
-		MACstaticHTML = homeDir + "LPGA/staticHTML.html";
-		MACstaticHTMLURL = "file:///" + homeDir + "LPGA/staticHTML.html";
+		MACleaderboardFile = homeDir + "PusH/Leaderboard.txt";
+		MACerrorFile = homeDir + "PusH/LPGA Errors.txt";
+		MACstaticHTML = homeDir + "PusH/staticHTML.html";
+		MACstaticHTMLURL = "file:///" + homeDir + "PusH/staticHTML.html";
 		MACdebugFile = "";
 	}
 
@@ -522,7 +523,7 @@ public class parseAutomation {
 
 		if (PC.equalsIgnoreCase("PC")) {
 
-			if (PCdebugFile == "") {
+			if (PCdebugFile.contains("htm") == false) {
 				driver.get(baseUrl);
 			} else {
 				driver.get("file:///" + PCdebugFile);
@@ -562,7 +563,7 @@ public class parseAutomation {
 				}
 			}
 		} else {
-			if (MACdebugFile == "") {
+			if (MACdebugFile.contains("htm") == false) {
 				driver.get(baseUrl);
 			} else {
 				driver.get("file:///" + MACdebugFile);
@@ -663,7 +664,7 @@ public class parseAutomation {
 		try {
 
 			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(scrFile, new File("c:\\LPGA\\screenshot" + i + ".png"));
+			FileUtils.copyFile(scrFile, new File("c:\\PusH\\screenshot" + i + ".png"));
 
 			driver.manage().deleteAllCookies();
 			driver.get("https://www.parse.com/user_session/new");
