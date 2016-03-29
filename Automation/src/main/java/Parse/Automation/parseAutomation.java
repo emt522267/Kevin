@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
@@ -36,7 +37,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	static String version = "V2.1.3";
+	static String version = "V2.2.1";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl = "http://lpga.com/leaderboard";
@@ -80,6 +81,7 @@ public class parseAutomation {
 	String MACstaticHTMLURL = "";
 	String MACdebugFile = "";
 	String PC;
+	int daFuq = 0;
 
 	public static void main(String[] args) {
 
@@ -94,7 +96,7 @@ public class parseAutomation {
 		// SplashDemo.splashRun();
 
 		getOS();
-		
+
 		chromeDriverSetup();
 
 	}
@@ -113,7 +115,7 @@ public class parseAutomation {
 		} else {
 
 			System.setProperty("webdriver.chrome.driver", "C:\\PusH\\chromedriver_win32\\chromedriver.exe");
-			 
+
 			driver = new ChromeDriver();
 			driver2 = new ChromeDriver();
 			baseUrl = "http://lpga.com/leaderboard";
@@ -412,7 +414,8 @@ public class parseAutomation {
 		Container content = pf.getContentPane();
 		progressBar.setValue(percentBar);
 		progressBar.setStringPainted(true);
-		Border border = BorderFactory.createTitledBorder("Status Bar will begin once the leaderboard \nhas been read.");
+		Border border = BorderFactory.createTitledBorder("Status Bar will begin once the leaderboard "
+				+ System.lineSeparator() + "has been read." +  "Version: " + version);
 		progressBar.setBorder(border);
 		content.add(progressBar, BorderLayout.NORTH);
 		pf.setSize(300, 100);
@@ -650,6 +653,22 @@ public class parseAutomation {
 		// System.out.println(aMpM);
 	}
 
+	public void parseLogin() throws IOException {
+		File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(scrFile, new File("c:\\PusH\\screenshot" + i + ".png"));
+
+		driver.manage().deleteAllCookies();
+		driver.get("https://www.parse.com/user_session/new");
+
+		driver.findElement(By.name("user_session[email]")).sendKeys("jake.brokaw@lpga.com");
+		driver.findElement(By.name("user_session[password]")).clear();
+		driver.findElement(By.name("user_session[password]")).sendKeys("ChangX31");
+		driver.findElement(By.className("submit__AiNYw")).click();
+
+		daFuq++;
+
+	}
+
 	public void Parse(String player, String Round, String hour, String min, String AM)
 			throws AWTException, InterruptedException, ParseException {
 
@@ -660,69 +679,66 @@ public class parseAutomation {
 		takeApartNewDate();
 
 		System.out.print("Player: " + player + "    Round: " + Round + "  Time:  " + hour + min + AM);
-
 		try {
 
-			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(scrFile, new File("c:\\PusH\\screenshot" + i + ".png"));
+			if (daFuq == 0) {
 
-			driver.manage().deleteAllCookies();
-			driver.get("https://www.parse.com/user_session/new");
-
-			driver.findElement(By.name("user_session[email]")).sendKeys("jake.brokaw@lpga.com");
-			driver.findElement(By.name("user_session[password]")).clear();
-			driver.findElement(By.name("user_session[password]")).sendKeys("ChangX31");
-			driver.findElement(By.className("submit__AiNYw")).click();
-
-			try {
-				driver.findElement(By.linkText("Continue")).click();
-			} catch (Exception ex) {
+				parseLogin();
 
 			}
 
-			driver.navigate().to("https://www.parse.com/apps/lpga-now/push_notifications");
-			Thread.sleep(2000);
-			driver.findElement(By.linkText("Send a push")).click();
-			driver.findElement(By.className("icon_windows")).click();
+			else {
 
-			// driver.findElement(By.id("target_type_segment")).click();
-			driver.findElement(By.cssSelector("button.add_constraint_button")).click();
-			Thread.sleep(2000);
-			driver.findElement(By.cssSelector("input.default")).click();
-			driver.findElement(By.cssSelector("input.default")).clear();
-			driver.findElement(By.cssSelector("input.default")).sendKeys(Keys.DELETE);
-			driver.findElement(By.cssSelector("input.default"))
-					.sendKeys("Player-" + getPlayerID(player) + Keys.ARROW_DOWN + Keys.ENTER);
-			Thread.sleep(2000);
-			driver.findElement(By.cssSelector("i.icon_hourGlass")).click();
-			Thread.sleep(2000);
-			driver.findElement(By.name("push_date")).click();
-			driver.findElement(By.name("push_date")).clear();
-			driver.findElement(By.name("push_date")).sendKeys(deliveryDate);
-			Thread.sleep(3000);
-			new Select(driver.findElement(By.name("push_hour"))).selectByVisibleText(Hour);
-			new Select(driver.findElement(By.name("push_minute"))).selectByVisibleText(":" + Minute);
-			new Select(driver.findElement(By.name("push_ampm"))).selectByVisibleText(aMpM);
-			Thread.sleep(1500);
-			driver.findElement(By.id("message_all")).clear();
+				try {
+					driver.findElement(By.linkText("Continue")).click();
+				} catch (Exception ex) {
 
-			if (round.equalsIgnoreCase("1")) {
-				driver.findElement(By.id("message_all")).sendKeys(player + " is teeing off for Round " + Round
-						+ " of the " + tournamentName + ". Follow her scores on LPGA.com or the LPGA Now app.");
-			} else {
-				driver.findElement(By.id("message_all")).sendKeys(player + " is teeing off for Round " + Round
-						+ ". Follow her scores on LPGA.com or the LPGA Now app.");
-			}
-			Thread.sleep(2000);
+				}
 
-			if (driver.findElement(By.id("recipients_counter")).equals("This will be sent to 0 devices") == true) {
-				errors[i] = "\n" + player + "\n     ";
-				driver.navigate().back();
-
-			} else {
+				driver.navigate().to("https://www.parse.com/apps/lpga-now/push_notifications");
 				Thread.sleep(2000);
-				driver.findElement(By.id("send_push")).click();
+				driver.findElement(By.linkText("Send a push")).click();
+				driver.findElement(By.className("icon_windows")).click();
 
+				// driver.findElement(By.id("target_type_segment")).click();
+				driver.findElement(By.cssSelector("button.add_constraint_button")).click();
+				Thread.sleep(2000);
+				driver.findElement(By.cssSelector("input.default")).click();
+				driver.findElement(By.cssSelector("input.default")).clear();
+				driver.findElement(By.cssSelector("input.default")).sendKeys(Keys.DELETE);
+				driver.findElement(By.cssSelector("input.default"))
+						.sendKeys("Player-" + getPlayerID(player) + Keys.ARROW_DOWN + Keys.ENTER);
+				Thread.sleep(2000);
+				driver.findElement(By.cssSelector("i.icon_hourGlass")).click();
+				Thread.sleep(2000);
+				driver.findElement(By.name("push_date")).click();
+				driver.findElement(By.name("push_date")).clear();
+				driver.findElement(By.name("push_date")).sendKeys(deliveryDate);
+				Thread.sleep(3000);
+				new Select(driver.findElement(By.name("push_hour"))).selectByVisibleText(Hour);
+				new Select(driver.findElement(By.name("push_minute"))).selectByVisibleText(":" + Minute);
+				new Select(driver.findElement(By.name("push_ampm"))).selectByVisibleText(aMpM);
+				Thread.sleep(1500);
+				driver.findElement(By.id("message_all")).clear();
+
+				if (round.equalsIgnoreCase("1")) {
+					driver.findElement(By.id("message_all")).sendKeys(player + " is teeing off for Round " + Round
+							+ " of the " + tournamentName + ". Follow her scores on LPGA.com or the LPGA Now app.");
+				} else {
+					driver.findElement(By.id("message_all")).sendKeys(player + " is teeing off for Round " + Round
+							+ ". Follow her scores on LPGA.com or the LPGA Now app.");
+				}
+				Thread.sleep(2000);
+
+				if (driver.findElement(By.id("recipients_counter")).equals("This will be sent to 0 devices") == true) {
+					errors[i] = "\n" + player + "\n     ";
+					driver.navigate().back();
+
+				} else {
+					Thread.sleep(2000);
+					driver.findElement(By.id("send_push")).click();
+
+				}
 			}
 
 		} catch (NoSuchElementException w) {
