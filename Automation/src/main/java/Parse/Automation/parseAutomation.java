@@ -411,11 +411,11 @@ public class parseAutomation {
 	public void progress(int percentBar) {
 
 		pf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		pf.setTitle("Version: " + version);
 		Container content = pf.getContentPane();
 		progressBar.setValue(percentBar);
 		progressBar.setStringPainted(true);
-		Border border = BorderFactory.createTitledBorder("Status Bar will begin once the leaderboard "
-				+ System.lineSeparator() + "has been read." +  "Version: " + version);
+		Border border = BorderFactory.createTitledBorder("Status Bar will begin once the leaderboard has been read.");
 		progressBar.setBorder(border);
 		content.add(progressBar, BorderLayout.NORTH);
 		pf.setSize(300, 100);
