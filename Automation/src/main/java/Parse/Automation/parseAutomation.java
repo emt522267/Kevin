@@ -38,6 +38,8 @@ import org.openqa.selenium.support.ui.Select;
 public class parseAutomation {
 
 	static String version = "V2.2.1";
+	String parseUser = "jake.brokaw@lpga.com";
+	String parsePassword = "ChangX31";
 	private WebDriver driver;
 	private WebDriver driver2;
 	private String baseUrl = "http://lpga.com/leaderboard";
@@ -660,11 +662,13 @@ public class parseAutomation {
 		driver.manage().deleteAllCookies();
 		driver.get("https://www.parse.com/user_session/new");
 
-		driver.findElement(By.name("user_session[email]")).sendKeys("jake.brokaw@lpga.com");
+		driver.findElement(By.name("user_session[email]")).sendKeys(parseUser);
 		driver.findElement(By.name("user_session[password]")).clear();
-		driver.findElement(By.name("user_session[password]")).sendKeys("ChangX31");
+		driver.findElement(By.name("user_session[password]")).sendKeys(parsePassword);
 		driver.findElement(By.className("submit__AiNYw")).click();
 
+		
+		
 		daFuq++;
 
 	}
