@@ -77,6 +77,9 @@ public class intro extends JFrame {
 					} catch (IOException e) {
 						
 						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 					
 
@@ -88,6 +91,9 @@ public class intro extends JFrame {
 						b.getURLs();
 					} catch (IOException e) {
 						
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

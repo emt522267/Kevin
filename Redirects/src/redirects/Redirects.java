@@ -2,6 +2,7 @@ package redirects;
 
 import javax.swing.JFrame;
 
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import javax.swing.JFileChooser;
@@ -28,6 +29,7 @@ public class Redirects extends JFrame {
 	static int returnCode;
 	static String returnURL;
 	static intro in = new intro();
+	static WebClient webClient = new WebClient();
 
 	public static void main(String[] args) {
 
@@ -35,7 +37,7 @@ public class Redirects extends JFrame {
 
 	}
 
-	public void getURLs() throws IOException {
+	public void getURLs() throws IOException, InterruptedException {
 		System.out.println(oneOrTwo);
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop"));
@@ -49,7 +51,7 @@ public class Redirects extends JFrame {
 		parseURLs();
 	}
 
-	public void parseURLs() throws IOException {
+	public void parseURLs() throws IOException, InterruptedException {
 
 		CsvParserSettings settings = new CsvParserSettings();
 		settings.getFormat().setLineSeparator("\n");
@@ -65,15 +67,15 @@ public class Redirects extends JFrame {
 		}
 
 		// Print the array
-		for (String[] arr : array) {
+		/*for (String[] arr : array) {
 			System.out.println(Arrays.toString(arr));
 
-		}
+		}*/
 
 		callURL();
 	}
 
-	public static void callURL() throws MalformedURLException, IOException {
+	public static void callURL() throws MalformedURLException, IOException, InterruptedException {
 
 		if (oneOrTwo == 1) {
 			int arrayLenght = array.length;
@@ -81,6 +83,7 @@ public class Redirects extends JFrame {
 				String currentURL = Arrays.deepToString(array[i]);
 
 				currentURL = currentURL.substring(1, currentURL.length() - 1);
+				
 				returnCode = getResponseCode(currentURL);
 				rewriteArray(0);
 				i++;
@@ -92,23 +95,47 @@ public class Redirects extends JFrame {
 			do {
 				String currentURL = array[x][i].toString();
 				returnCode = getResponseCode(currentURL);
+				//System.out.println(returnCode);
 				rewriteArray(1);
-				i++;
+
 				x++;
-			} while (i < arrayLenght);
+			} while (x < arrayLenght);
 		}
 
 	}
 
-	public static int getResponseCode(String urlString) throws MalformedURLException, IOException {
-		URL url = new URL(urlString);
-		HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-		huc.setRequestMethod("GET");
-		huc.connect();
-		returnURL = huc.getURL().toString();
+	public static int getResponseCode(String urlString)
+			throws MalformedURLException, IOException, InterruptedException {
+		/*
+		 * URL url = new URL(urlString); HttpURLConnection huc =
+		 * (HttpURLConnection) url.openConnection();
+		 * huc.setRequestMethod("GET"); huc.connect(); Thread.sleep(2000);
+		 * returnURL = huc.getURL().toString();
+		 * 
+		 * System.out.println(returnURL); return huc.getResponseCode();
+		 */
 
-		System.out.println(returnURL);
-		return huc.getResponseCode();
+		URL url = new URL(urlString);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		
+		connection.setRequestMethod("GET");
+		
+		connection.connect();
+		int code = connection.getResponseCode();
+	
+		
+		returnURL = connection.getURL().toString();
+		urlString = urlString.trim();
+		returnURL = returnURL.trim();
+		
+		if (urlString.trim() == returnURL.trim())
+		{
+			System.out.println("ERROR ^^^^^^^^^^^^^^^^^^^^^^^");
+		}
+		
+		//System.out.println(returnURL);
+		connection.disconnect();
+		return code;
 
 	}
 
@@ -116,18 +143,19 @@ public class Redirects extends JFrame {
 
 		if (oneOrTwo == 2) {
 			String t = array[x][i];
-			i = i + a;
+			i = 1;
 			String f = t + " WAS REDIRECTED TO " + returnURL + " RETURNED: " + returnCode;
-			in.addText(f + System.lineSeparator());
-			f = array[x][i];
+			in.addText(f);
+			// array[x][i] = f.split("");
 			System.out.println(f);
+			i = 0;
 		}
 
 		if (oneOrTwo == 1) {
 			String t = Arrays.deepToString(array[i]);
 			i = i + a;
 			String f = t + " WAS REDIRECTED TO " + returnURL + " RETURNED: " + returnCode;
-			in.addText(f + System.lineSeparator());
+			in.addText(f);
 			array[i] = f.split("");
 			System.out.println(f);
 		}
@@ -145,14 +173,14 @@ public class Redirects extends JFrame {
 		String csv = "";
 		for (int i = 0; i < h.length; i++) {
 			for (int j = 0; j < h[i].length; j++) {
-				csv = csv + h[i][j]; 
+				csv = csv + h[i][j];
 				if (j == (h[i].length - 1))
 					csv = csv + ", " + System.lineSeparator();
 			}
 			if (i == (h.length - 1))
 				csv = csv + System.lineSeparator();
 		}
-		
+
 		System.out.println("DONE");
 		return csv;
 	}

@@ -37,7 +37,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class parseAutomation {
 
-	static String version = "V2.2.1";
+	static String version = "V2.2.2";
 	String parseUser = "jake.brokaw@lpga.com";
 	String parsePassword = "ChangX31";
 	private WebDriver driver;
@@ -120,7 +120,9 @@ public class parseAutomation {
 
 			driver = new ChromeDriver();
 			driver2 = new ChromeDriver();
-			baseUrl = "http://lpga.com/leaderboard";
+			baseUrl = "file:///C:/Users/kevin.anderson/Desktop/staticHTML.html";
+			// "http://lpga.com/leaderboard";
+
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		}
 	}
@@ -291,6 +293,11 @@ public class parseAutomation {
 		String text1;
 		String text2;
 		errorTest = "getplayerid";
+
+		if (playerName.startsWith("Brooke M") == true) {
+			playerName = "Brooke Henderson";
+		}
+	
 		driver2.get("http://origin-www.lpga.com/-/ajax/PlayerSearch/Search?text=" + playerName);
 		text = driver2.findElement(By.tagName("body")).getText();
 		text1 = getPlayerURL(text);
@@ -667,8 +674,6 @@ public class parseAutomation {
 		driver.findElement(By.name("user_session[password]")).sendKeys(parsePassword);
 		driver.findElement(By.className("submit__AiNYw")).click();
 
-		
-		
 		daFuq++;
 
 	}
